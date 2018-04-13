@@ -1,6 +1,7 @@
 
 import datetime
 
+from django.utils import timezone
 import django.test as test
 import django_unixdatetimefield.tests.models as tm
 
@@ -30,11 +31,16 @@ class UnixDateTimeFieldTestCase(test.TestCase):
         m = tm.BlankField.objects.create()
         self.assertIsNone(m.created_at)
 
+    @test.override_settings(USE_TZ=True)
     def test_autoset_field(self):
         m = tm.AutosetField.objects.create()
         self.assertIsNotNone(m.created_at)
         self.assertIsNotNone(m.updated_at)
         self.assertTrue(isinstance(m.created_at, datetime.datetime))
         self.assertTrue(isinstance(m.updated_at, datetime.datetime))
+        self.assertFalse(timezone.is_naive(m.created_at))
+        self.assertFalse(timezone.is_naive(m.updated_at))
         m.save()
         self.assertGreater(m.updated_at, m.created_at)
+        self.assertFalse(timezone.is_naive(m.created_at))
+        self.assertFalse(timezone.is_naive(m.updated_at))
