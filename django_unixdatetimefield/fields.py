@@ -38,7 +38,7 @@ class UnixDateTimeField(models.DateTimeField):
 
         if self._is_string(val):
             try:
-                parsed = parse_datetime(value)
+                parsed = parse_datetime(val)
                 if parsed is not None:
                     return parsed
             except ValueError:

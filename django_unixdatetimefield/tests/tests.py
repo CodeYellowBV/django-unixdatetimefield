@@ -14,6 +14,13 @@ class UnixDateTimeFieldTestCase(test.TestCase):
         self.assertTrue(isinstance(m.created_at, datetime.datetime))
         self.assertEqual(m.created_at, d)
 
+    def test_default_field_from_text_conversion(self):
+        d = datetime.datetime(2015, 2, 21, 19, 38, 32, 209148)
+        m = tm.DefaultField(created_at='2015-02-21T19:38:32.209148')
+        m.full_clean()
+        self.assertTrue(isinstance(m.created_at, datetime.datetime))
+        self.assertEqual(m.created_at, d)
+
     def test_null_field(self):
         m = tm.NullField.objects.create()
         self.assertIsNone(m.created_at)
